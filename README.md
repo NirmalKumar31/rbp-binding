@@ -15,6 +15,33 @@
 
 ---
 
+## Table of Contents
+
+- [Abstract](#abstract)
+- [Project at a Glance](#project-at-a-glance)
+- [Documentation](#documentation)
+- [Overall Architecture](#overall-architecture)
+- [1. Biological Foundation](#1-biological-foundation)
+- [2. Data Sources](#2-data-sources)
+- [3. End-to-End Research Pipeline](#3-end-to-end-research-pipeline)
+- [4. Dataset Construction](#4-dataset-construction)
+- [5. Exploratory Data Analysis and Validation](#5-exploratory-data-analysis-and-validation)
+- [6. Models](#6-models)
+- [7. Main Results](#7-main-results)
+- [8. HPC and Slurm Engineering](#8-hpc-and-slurm-engineering)
+- [9. Reproducible Execution](#9-reproducible-execution)
+- [10. Repository Structure](#10-repository-structure)
+- [11. Generated Outputs](#11-generated-outputs)
+- [12. Engineering and Research Contributions](#12-engineering-and-research-contributions)
+- [13. Key Decisions and Trade-offs](#13-key-decisions-and-trade-offs)
+- [14. Limitations](#14-limitations)
+- [15. Troubleshooting Notes](#15-troubleshooting-notes)
+- [16. Tech Stack](#16-tech-stack)
+- [17. Portfolio Summary](#17-portfolio-summary)
+- [18. Selected References and Data Resources](#18-selected-references-and-data-resources)
+
+---
+
 ## Abstract
 
 I built **RBP-Binding** to answer two connected research questions:
@@ -26,7 +53,7 @@ I trained separate models for **16 RNA-binding proteins** using reproducible ENC
 
 The strongest model was **SpliceBERT**, which achieved a mean held-out test AUROC of **0.893** and won **13 of 16** protein-level comparisons. I then designed a splice-distance-matched ablation to test whether its advantage came from exploiting splice-site proximity. The observed AUROC changes were small, supporting the conclusion that the model learned genuine RBP-binding signal rather than a simple splice-site shortcut.
 
-Finally, without training on disease labels, I used the tuned models to score **6,055 ClinVar pathogenic/benign SNVs located at real binding sites**. SpliceBERT reached an AUROC of **0.837 for noncoding variants**, while performance was much weaker for coding variants—an important domain-specific result consistent with what an RNA-binding model should and should not be expected to capture.
+Finally, without training on disease labels, I used the tuned models to score **6,055 ClinVar pathogenic/benign SNVs located at real binding sites**. SpliceBERT reached an AUROC of **0.837 for noncoding variants**, while performance was much weaker for coding variants. This is an important domain-specific result, consistent with what an RNA-binding model should and should not be expected to capture.
 
 ---
 
@@ -57,8 +84,8 @@ Finally, without training on disease labels, I used the tuned models to score **
 
 Two in-depth companion documents accompany this README:
 
-- **[docs/RBP_BINDING_MASTERCLASS.md](docs/RBP_BINDING_MASTERCLASS.md)** — the full *science* walkthrough: biology, data, preprocessing, models, results, and the decision log, from first principles.
-- **[docs/CLUSTER_AND_OPS_MASTERCLASS.md](docs/CLUSTER_AND_OPS_MASTERCLASS.md)** — the full *operations* walkthrough: the cluster, Slurm, how to read every command's output, the data/process flow, the validation gate, `rsync`, and every error encountered with its fix.
+- **[docs/RBP_BINDING_MASTERCLASS.md](docs/RBP_BINDING_MASTERCLASS.md)** covers the full *science* walkthrough: biology, data, preprocessing, models, results, and the decision log, from first principles.
+- **[docs/CLUSTER_AND_OPS_MASTERCLASS.md](docs/CLUSTER_AND_OPS_MASTERCLASS.md)** covers the full *operations* walkthrough: the cluster, Slurm, how to read every command's output, the data/process flow, the validation gate, `rsync`, and every error encountered with its fix.
 
 ---
 
@@ -98,11 +125,45 @@ I therefore built this project as a complete research workflow rather than a sin
 
 ---
 
+# Overall Architecture
+
+The whole study runs as a reproducible pipeline on the **NEU Explorer** HPC cluster, orchestrated by **Slurm**. The two diagrams below show the physical system (where compute lives) and the workflow mapped onto it.
+
+**System and hardware.** Code is developed on a Mac and synced to Explorer with `rsync`; jobs are submitted from the login node and run on CPU or GPU compute nodes that share one filesystem.
+
+```mermaid
+flowchart LR
+    DEV["Local Mac (develop code + docs)"] -->|"rsync over SSH"| LOGIN["Explorer login node (submit + monitor)"]
+    LOGIN -->|"sbatch CPU jobs"| CPU["short partition: Xeon Gold 6132 nodes, ~28 cores, 62 to 256 GB, QOS ~50 running"]
+    LOGIN -->|"sbatch GPU jobs"| GPU["gpu partition: Tesla V100-SXM2-32GB, 4 GPUs per node, QOS 8 submit / 4 run"]
+    CPU --> FS[("Shared filesystem: ~/rbp-binding")]
+    GPU --> FS
+    FS -->|"rsync results + models back"| DEV
+```
+
+**Workflow on the cluster.** A phase gate separates data preparation from training: nothing trains until the validation gate passes.
+
+```mermaid
+flowchart TD
+    A["Phase A: submit_data.sh"] --> B["prep array (short / CPU): 20 tasks build datasets"]
+    B -->|"afterok"| C["validate gate (short / CPU): EDA + hard checks"]
+    C --> D{"VALIDATION PASSED?"}
+    D -->|"No"| E["Stop and fix the data"]
+    D -->|"Yes"| F["Phase B: submit_models.sh"]
+    F --> G["CNN array (short / CPU): 20 tasks"]
+    F --> H["LM array (gpu / 4x V100): 8 packed tasks, 60 fine-tunes"]
+    G -->|"afterok"| I["aggregate (short / CPU): tables + figures"]
+    H -->|"afterok"| I
+    I --> J["clinvar (gpu / V100): variant-effect scoring"]
+```
+
+---
+
 # 1. Biological Foundation
 
-## 1.1 My Biological Mental Model
+## 1.1 Biological Mental Model
 
-I treat an RNA molecule as a sequence made from four nucleotides—A, C, G, and U—and an RNA-binding protein as a molecular reader that prefers particular sequence and context patterns.
+I treat an RNA molecule as a sequence made from four nucleotides (A, C, G, and U), and an RNA-binding protein as a molecular reader that prefers particular sequence and context patterns.
 
 ```mermaid
 flowchart LR
@@ -114,7 +175,7 @@ flowchart LR
 
 In this project, I model binding from sequence alone. I do not use expression, conservation, experimentally measured structure, or tissue-specific covariates as model inputs. This makes the scope narrower, but it also makes the experiment interpretable and allows me to score hypothetical reference and alternate sequences consistently.
 
-## 1.2 How eCLIP Provides My Positive Labels
+## 1.2 How eCLIP Provides the Positive Labels
 
 I use **enhanced crosslinking and immunoprecipitation (eCLIP)** data from ENCODE. eCLIP captures RNA fragments that were physically bound by a selected protein in living cells.
 
@@ -322,7 +383,7 @@ I chose this specific multi-chromosome split for two reasons beyond leakage safe
 
 # 5. Exploratory Data Analysis and Validation
 
-## 5.1 What I Verified Before Training
+## 5.1 What Was Verified Before Training
 
 My EDA is a stress test of modeling assumptions rather than a purely visual exercise. I check:
 
@@ -343,7 +404,7 @@ Key observed checks:
 - expected motifs were recovered for proteins including RBFOX2, QKI, PTBP1, and TARDBP;
 - the splice-donor enrichment discovered in EDA motivated the explicit ablation.
 
-## 5.2 My Hard Validation Gate
+## 5.2 The Hard Validation Gate
 
 I designed the cluster pipeline so model training cannot begin automatically after preprocessing. Phase A stops after validation, and I manually inspect the validation log before launching Phase B.
 
@@ -365,7 +426,7 @@ The validation script exits nonzero on any hard failure. I also tested the gate 
 
 ## 5.3 Reproducibility Hash
 
-For the primary datasets, I compute a SHA-256 hash of all content columns except the intentionally changed split label. I compare the fresh Explorer output with hashes recorded from the known-good **v2** data. (Here `v2` is a prior validated build of this pipeline; `rbp-binding` is the corrected, from-scratch rebuild whose only intended data change from v2 is the multi-chromosome split — so identical content hashes are exactly what I expect.)
+For the primary datasets, I compute a SHA-256 hash of all content columns except the intentionally changed split label. I compare the fresh Explorer output with hashes recorded from the known-good **v2** data. (Here `v2` is a prior validated build of this pipeline; `rbp-binding` is the corrected, from-scratch rebuild whose only intended data change from v2 is the multi-chromosome split, so identical content hashes are exactly what I expect.)
 
 All 16 proteins reported `vs_v2 = match`, demonstrating that the fresh extraction reproduced the expected content.
 
@@ -558,7 +619,7 @@ SpliceBERT was both the strongest average model and roughly **3.6× cheaper** in
 
 I ran the production workflow on **Northeastern Explorer**, a shared HPC cluster managed by Slurm. This section explains not only the commands, but where every process and file resides.
 
-## 8.1 Physical Roles: My Laptop, Login Node, and Compute Nodes
+## 8.1 Physical Roles: Laptop, Login Node, and Compute Nodes
 
 ```mermaid
 flowchart LR
@@ -567,7 +628,7 @@ flowchart LR
     B -->|"request GPU resources via Slurm"| D["LM + ClinVar jobs → gpu-partition nodes"]
 ```
 
-### How I use each location
+### How each location is used
 
 - **My Mac:** I develop code, maintain documentation, and inspect downloaded results.
 - **Login node:** I navigate files, submit jobs, monitor the queue, and inspect logs. I do not perform heavy training here.
@@ -639,7 +700,7 @@ sequenceDiagram
 
 Unlike an interactive shell, an `sbatch` job continues after I disconnect from SSH because Slurm owns the process.
 
-## 8.6 My Corrected Production Workflow
+## 8.6 Production Workflow
 
 I use a deliberate human gate between data preparation and model training. I also submit ClinVar separately after aggregation to avoid exceeding the GPU QOS submission cap.
 
@@ -762,18 +823,18 @@ I reserve GPUs for work that benefits from accelerator throughput. The ~7K-param
 - **GPU:** NVIDIA Tesla V100-SXM2-32GB
 - **GPU nodes used:** `d1017` and `d1019`
 - **GPU-node capacity:** 4× V100 per node, 28 CPU cores (Intel Xeon Gold 6132 @ 2.60 GHz), ~191 GB RAM
-- **`short` (CPU) nodes:** heterogeneous — most are 20+ cores / ~62 GB RAM (a few much larger; one sampled node was 28 cores / 256 GB). My CPU jobs requested ≤ 16 GB, so they fit any of them.
+- **`short` (CPU) nodes:** heterogeneous: most are 20+ cores / ~62 GB RAM (a few much larger; one sampled node was 28 cores / 256 GB). The CPU jobs requested ≤ 16 GB, so they fit any of them.
 - **CUDA-compatible PyTorch build:** `cu118`
 
 ### Per-job resource requests
 
 | Job | Partition | CPUs per task | Memory | GPU | Array/tasks | Typical elapsed time |
 |---|---|---:|---:|---:|---|---:|
-| `rbp-prep` | `short` | 4 | 16 GB | — | 20, throttled at 8 | 0.4–4.3 min/task |
-| `rbp-validate` | `short` | 4 | 16 GB | — | 1 | ~20 sec |
-| `rbp-cnn` | `short` | 4 | 8 GB | — | 20, throttled at 8 | 0.4–1.6 min/task |
+| `rbp-prep` | `short` | 4 | 16 GB | none | 20, throttled at 8 | 0.4–4.3 min/task |
+| `rbp-validate` | `short` | 4 | 16 GB | none | 1 | ~20 sec |
+| `rbp-cnn` | `short` | 4 | 8 GB | none | 20, throttled at 8 | 0.4–1.6 min/task |
 | `rbp-lm` | `gpu` | 8 | 24 GB | 1× V100/task | 8, throttled at 4 | 8–34 min/task |
-| `rbp-agg` | `short` | 2 | 8 GB | — | 1 | ~5 sec |
+| `rbp-agg` | `short` | 2 | 8 GB | none | 1 | ~5 sec |
 | `rbp-clinvar` | `gpu` | 8 | 24 GB | 1× V100 | 1 | ~5 min |
 
 ## 8.13 Moving Code and Results
@@ -982,7 +1043,7 @@ rbp-binding/
 ├── eda/                   # generated EDA artifacts
 ├── requirements.txt
 ├── .gitignore
-└── README.md              # this file — repo landing page
+└── README.md              # this file (repo landing page)
 ```
 
 ---
@@ -1012,7 +1073,7 @@ rbp-binding/
 
 # 12. Engineering and Research Contributions
 
-## What I Demonstrate Technically
+## Technical Contributions
 
 - Integration of ENCODE, GENCODE, and ClinVar datasets
 - Genomic coordinate-system normalization
@@ -1029,14 +1090,14 @@ rbp-binding/
 - CPU/GPU resource separation and utilization measurement
 - Reproducible artifact generation and local/cluster synchronization
 
-## What I Demonstrate Scientifically
+## Scientific Contributions
 
-- I distinguish predictive performance from biological validity.
-- I treat a discovered confound as a testable hypothesis rather than hiding it.
-- I preserve the held-out test set for final evaluation.
-- I report null and domain-limited results honestly.
-- I avoid claiming that a mechanistic variant score is a clinical diagnostic.
-- I compare model families under a shared dataset and tuning protocol.
+- Predictive performance is kept distinct from biological validity.
+- A discovered confound is treated as a testable hypothesis, not hidden.
+- The held-out test set is preserved for final evaluation.
+- Null and domain-limited results are reported honestly.
+- A mechanistic variant score is never claimed to be a clinical diagnostic.
+- Model families are compared under a shared dataset and tuning protocol.
 
 ---
 
@@ -1143,15 +1204,15 @@ The central result is not simply that SpliceBERT achieved the highest AUROC. The
 - ClinVar: https://www.ncbi.nlm.nih.gov/clinvar/
 - MultiMolecule: https://multimolecule.danling.org/
 - Slurm documentation: https://slurm.schedmd.com/documentation.html
-- Alipanahi et al. — DeepBind
-- Van Nostrand et al. — ENCODE eCLIP
-- Chen et al. — RNA-FM
+- DeepBind (Alipanahi et al., 2015): https://www.nature.com/articles/nbt.3300
+- ENCODE eCLIP (Van Nostrand et al., 2016): https://www.nature.com/articles/nmeth.3810
+- RNA-FM (Chen et al., 2022): https://arxiv.org/abs/2204.00300
 
 ---
 
 ## Final Takeaway
 
-I designed RBP-Binding as a complete research system—not as a collection of disconnected model runs. The project begins with experimentally supported binding sites, builds a controlled and reproducible dataset, validates the data before spending GPU time, compares task-specific and pretrained architectures fairly, tests a biologically plausible confound, and evaluates whether the learned binding signal transfers to clinically interpreted variants.
+I designed RBP-Binding as a complete research system, not as a collection of disconnected model runs. The project begins with experimentally supported binding sites, builds a controlled and reproducible dataset, validates the data before spending GPU time, compares task-specific and pretrained architectures fairly, tests a biologically plausible confound, and evaluates whether the learned binding signal transfers to clinically interpreted variants.
 
 My strongest result is a self-consistent research arc:
 
