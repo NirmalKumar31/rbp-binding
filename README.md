@@ -106,10 +106,10 @@ I treat an RNA molecule as a sequence made from four nucleotides—A, C, G, and 
 
 ```mermaid
 flowchart LR
-    A["I start with an RNA sequence"] --> B["An RBP recognizes sequence and context"]
+    A["RNA sequence"] --> B["An RBP recognizes sequence + context"]
     B --> C["Binding changes RNA processing"]
     C --> D["Splicing, stability, transport, or translation may change"]
-    D --> E["A single variant can disrupt this regulatory interaction"]
+    D --> E["A single variant can disrupt this interaction"]
 ```
 
 In this project, I model binding from sequence alone. I do not use expression, conservation, experimentally measured structure, or tissue-specific covariates as model inputs. This makes the scope narrower, but it also makes the experiment interpretable and allows me to score hypothetical reference and alternate sequences consistently.
@@ -120,12 +120,12 @@ I use **enhanced crosslinking and immunoprecipitation (eCLIP)** data from ENCODE
 
 ```mermaid
 flowchart TD
-    A["I begin with living cells"] --> B["UV crosslinking fixes proteins to the RNA they touch"]
-    B --> C["I isolate one RBP with an antibody"]
+    A["Living cells"] --> B["UV crosslinking fixes proteins to the RNA they touch"]
+    B --> C["Isolate one RBP with an antibody"]
     C --> D["Bound RNA fragments are sequenced"]
-    D --> E["Reads are mapped to the genome"]
+    D --> E["Reads mapped to the genome"]
     E --> F["Reproducible read pileups become eCLIP peaks"]
-    F --> G["I use those peaks as positive binding examples"]
+    F --> G["Peaks become positive binding examples"]
 ```
 
 I use **reproducible peaks**, not single-replicate peak calls. These intervals represent sites supported across biological replicates and therefore provide a more defensible label source.
@@ -170,12 +170,12 @@ I excluded candidate proteins whose reproducible peak sets were too small to mai
 
 ```mermaid
 flowchart TD
-    A["ENCODE gives me binding coordinates"] --> D["I construct positive binding windows"]
-    B["GENCODE FASTA gives me nucleotide sequence"] --> D
-    C["GENCODE GTF gives me transcript and region context"] --> D
-    D --> E["I build matched negative windows"]
-    E --> F["I create per-protein model datasets"]
-    G["ClinVar gives me reference and alternate alleles"] --> H["I score downstream variant disruption"]
+    A["ENCODE → binding coordinates"] --> D["Construct positive binding windows"]
+    B["GENCODE FASTA → nucleotide sequence"] --> D
+    C["GENCODE GTF → transcript + region context"] --> D
+    D --> E["Build matched negative windows"]
+    E --> F["Per-protein model datasets"]
+    G["ClinVar → reference + alternate alleles"] --> H["Score variant disruption"]
     F --> H
 ```
 
@@ -198,18 +198,18 @@ These checks are necessary because a pipeline can run successfully while silentl
 
 ```mermaid
 flowchart TD
-    A["I define 16 proteins in config/proteins.tsv"] --> B["I download ENCODE, GENCODE, and ClinVar data"]
-    B --> C["I extract strand-corrected 101-nt positive windows"]
-    C --> D["I annotate transcript and region context"]
-    D --> E["I construct matched negatives"]
-    E --> F["I assign whole-chromosome train, validation, and test splits"]
-    F --> G["I run EDA and the hard validation gate"]
-    G -->|"Only after PASS"| H["I train CNN and language-model sweeps"]
-    H --> I["I aggregate AUROC, AUPRC, timing, and GPU metrics"]
-    I --> J["I run the splice-distance ablation"]
-    I --> K["I score ClinVar reference and alternate alleles"]
-    J --> L["I interpret whether the model used a splice shortcut"]
-    K --> M["I evaluate pathogenic versus benign disruption scores"]
+    A["Define 16 proteins in config/proteins.tsv"] --> B["Download ENCODE, GENCODE, and ClinVar data"]
+    B --> C["Extract strand-corrected 101-nt positive windows"]
+    C --> D["Annotate transcript + region context"]
+    D --> E["Construct matched negatives"]
+    E --> F["Assign whole-chromosome train / validation / test splits"]
+    F --> G["Run EDA + the hard validation gate"]
+    G -->|"Only after PASS"| H["Train CNN + language-model sweeps"]
+    H --> I["Aggregate AUROC, AUPRC, timing, GPU metrics"]
+    I --> J["Run the splice-distance ablation"]
+    I --> K["Score ClinVar reference + alternate alleles"]
+    J --> L["Interpret whether the model used a splice shortcut"]
+    K --> M["Evaluate pathogenic vs benign disruption scores"]
 ```
 
 The most important design principle is that I do **not** treat data preparation as a prelude to the “real” work. Dataset design, leakage control, validation, and confound testing are central research contributions in this repository.
@@ -232,12 +232,12 @@ For every eCLIP peak, I:
 
 ```mermaid
 flowchart LR
-    A["I read one eCLIP peak"] --> B["I compute its midpoint"]
-    B --> C["I extract 50 nt left and 50 nt right"]
-    C --> D{"Is the peak on the negative strand?"}
-    D -->|"Yes"| E["I reverse-complement the sequence"]
-    D -->|"No"| F["I retain the reference orientation"]
-    E --> G["I produce a 101-nt positive window"]
+    A["Read one eCLIP peak"] --> B["Compute its midpoint"]
+    B --> C["Extract 50 nt left + 50 nt right"]
+    C --> D{"Peak on the negative strand?"}
+    D -->|"Yes"| E["Reverse-complement the sequence"]
+    D -->|"No"| F["Retain reference orientation"]
+    E --> G["101-nt positive window"]
     F --> G
 ```
 
@@ -254,7 +254,7 @@ My primary negative sampler is deliberately strict. For every positive, I attemp
 
 ```mermaid
 flowchart TD
-    A["I start with one positive window"] --> B["I search its own transcript"]
+    A["One positive window"] --> B["Search its own transcript"]
     B --> C{"Same region type?"}
     C -->|"No"| B
     C -->|"Yes"| D{"GC within ±5%?"}
@@ -263,8 +263,8 @@ flowchart TD
     E -->|"No"| B
     E -->|"Yes"| F{"Exactly 101 nt and no N?"}
     F -->|"No"| B
-    F -->|"Yes"| G["I accept the matched negative"]
-    B -->|"No valid local candidate"| H["I search other bound transcripts of the same region type"]
+    F -->|"Yes"| G["Accept the matched negative"]
+    B -->|"No valid local candidate"| H["Search other bound transcripts of the same region type"]
     H --> C
 ```
 
@@ -285,10 +285,10 @@ In these datasets, I preserve all primary matching requirements and additionally
 
 ```mermaid
 flowchart LR
-    A["My primary matched pair"] --> B["I measure the positive's nearest-splice distance"]
-    B --> C["I assign a distance bucket: <50, 50–150, 150–500, 500–1500, or ≥1500 nt"]
-    C --> D["I require the negative to match the same bucket"]
-    D --> E["I retrain and compare primary versus splice-matched AUROC"]
+    A["Primary matched pair"] --> B["Measure the positive's nearest-splice distance"]
+    B --> C["Assign a distance bucket: <50, 50–150, 150–500, 500–1500, or ≥1500 nt"]
+    C --> D["Negative must match the same bucket"]
+    D --> E["Retrain + compare primary vs splice-matched AUROC"]
 ```
 
 I use this as an **ablation**, not as a silent replacement for the primary dataset. The purpose is to measure how much model performance depends on splice proximity.
@@ -305,10 +305,10 @@ I avoid random row-level splitting because neighboring windows and repeated geno
 
 ```mermaid
 flowchart TD
-    A["I assign every window by chromosome"] --> B{"Which chromosome contains it?"}
-    B -->|"chr1, chr2, or chr20"| C["I place it in test"]
-    B -->|"chr19, chr16, chr13, or chr18"| D["I place it in validation"]
-    B -->|"Any other standard chromosome"| E["I place it in train"]
+    A["Assign every window by chromosome"] --> B{"Which chromosome contains it?"}
+    B -->|"chr1, chr2, or chr20"| C["Place in test"]
+    B -->|"chr19, chr16, chr13, or chr18"| D["Place in validation"]
+    B -->|"Any other standard chromosome"| E["Place in train"]
     C --> F["No genomic locus can appear in multiple splits"]
     D --> F
     E --> F
@@ -349,16 +349,16 @@ I designed the cluster pipeline so model training cannot begin automatically aft
 
 ```mermaid
 flowchart TD
-    A["I finish all preprocessing tasks"] --> B["I regenerate EDA on the frozen cluster data"]
-    B --> C["I verify required files exist"]
-    C --> D["I verify exact 1:1 class balance"]
-    D --> E["I verify chromosome split rules"]
-    E --> F["I verify at least 100 validation and test pairs"]
-    F --> G["I verify no identical sequence crosses splits"]
-    G --> H["I compare content hashes with the known-good v2 reference"]
-    H --> I{"Does the validation log say PASSED?"}
-    I -->|"No"| J["I stop and debug the data"]
-    I -->|"Yes"| K["I manually authorize model training"]
+    A["Finish all preprocessing tasks"] --> B["Regenerate EDA on the frozen cluster data"]
+    B --> C["Verify required files exist"]
+    C --> D["Verify exact 1:1 class balance"]
+    D --> E["Verify chromosome split rules"]
+    E --> F["Verify ≥ 100 validation + test pairs"]
+    F --> G["Verify no identical sequence crosses splits"]
+    G --> H["Compare content hashes with the known-good v2 reference"]
+    H --> I{"Validation log says PASSED?"}
+    I -->|"No"| J["Stop + debug the data"]
+    I -->|"Yes"| K["Manually authorize model training"]
 ```
 
 The validation script exits nonzero on any hard failure. I also tested the gate by intentionally corrupting a split and removing an expected ablation file; the gate correctly failed.
@@ -386,15 +386,15 @@ All 16 proteins reported `vs_v2 = match`, demonstrating that the fresh extractio
 
 ```mermaid
 flowchart TD
-    A["I provide a 101-nt RNA sequence"] --> B{"Which model family am I training?"}
-    B -->|"CNN"| C["I one-hot encode A, C, G, and T"]
+    A["101-nt RNA sequence"] --> B{"Which model family?"}
+    B -->|"CNN"| C["One-hot encode A, C, G, T"]
     C --> D["Convolution filters learn local motifs"]
-    B -->|"RNA language model"| E["I tokenize the RNA sequence"]
-    E --> F["A pretrained transformer produces token embeddings"]
-    F --> G["I apply masked mean pooling"]
-    D --> H["I produce one binding logit"]
+    B -->|"RNA language model"| E["Tokenize the RNA sequence"]
+    E --> F["Pretrained transformer produces token embeddings"]
+    F --> G["Masked mean pooling"]
+    D --> H["One binding logit"]
     G --> H
-    H --> I["I convert the logit to a binding probability"]
+    H --> I["Logit → binding probability"]
 ```
 
 ## 6.3 CNN Architecture
@@ -419,11 +419,11 @@ The first convolutional filters function as learned motif detectors. The CNN is 
 
 ```mermaid
 flowchart LR
-    A["I load the pretrained RNA-FM encoder"] --> B["I freeze the original 100M-parameter weights"]
-    B --> C["I add rank-8 LoRA adapters to query and value projections"]
-    C --> D["I train the adapters with lr 1e-4"]
-    C --> E["I train my new classification head with lr 1e-3"]
-    D --> F["I save only adapters and head"]
+    A["Load the pretrained RNA-FM encoder"] --> B["Freeze the original 100M-parameter weights"]
+    B --> C["Add rank-8 LoRA adapters to query + value projections"]
+    C --> D["Train the adapters at lr 1e-4"]
+    C --> E["Train the new classification head at lr 1e-3"]
+    D --> F["Save only adapters + head"]
     E --> F
 ```
 
@@ -517,14 +517,14 @@ I use shifts `[-40, -20, 0, 20, 40]` so the model can evaluate the variant at se
 
 ```mermaid
 flowchart TD
-    A["I select a ClinVar SNV at a real eCLIP site"] --> B["I build five reference windows at different shifts"]
-    A --> C["I build five alternate windows at the same shifts"]
-    B --> D["My tuned binding model scores each reference window"]
-    C --> E["My tuned binding model scores each alternate window"]
-    D --> F["I calculate absolute reference–alternate differences"]
+    A["ClinVar SNV at a real eCLIP site"] --> B["Build 5 reference windows at different shifts"]
+    A --> C["Build 5 alternate windows at the same shifts"]
+    B --> D["Tuned model scores each reference window"]
+    C --> E["Tuned model scores each alternate window"]
+    D --> F["Absolute reference–alternate differences"]
     E --> F
-    F --> G["I retain the maximum disruption score"]
-    G --> H["I compare Pathogenic and Benign score distributions"]
+    F --> G["Retain the maximum disruption score"]
+    G --> H["Compare Pathogenic vs Benign score distributions"]
 ```
 
 Results across **6,055** variants at real binding sites:
@@ -562,9 +562,9 @@ I ran the production workflow on **Northeastern Explorer**, a shared HPC cluster
 
 ```mermaid
 flowchart LR
-    A["I develop and inspect results on my Mac"] -->|"SSH and rsync"| B["I enter the Explorer login node"]
-    B -->|"I request resources through Slurm"| C["My CPU compute jobs run on short-partition nodes"]
-    B -->|"I request GPU resources through Slurm"| D["My LM and ClinVar jobs run on gpu-partition nodes"]
+    A["Develop + inspect results on the Mac"] -->|"SSH + rsync"| B["Explorer login node"]
+    B -->|"request resources via Slurm"| C["CPU jobs → short-partition nodes"]
+    B -->|"request GPU resources via Slurm"| D["LM + ClinVar jobs → gpu-partition nodes"]
 ```
 
 ### How I use each location
@@ -578,11 +578,11 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    S[("My shared ~/rbp-binding directory")]
-    L["I access it from the login node"] --> S
-    I["I access it from an interactive compute node"] --> S
-    C["My CPU batch tasks read and write it"] --> S
-    G["My GPU batch tasks read and write it"] --> S
+    S[("Shared ~/rbp-binding directory")]
+    L["Login node accesses it"] --> S
+    I["Interactive compute node accesses it"] --> S
+    C["CPU batch tasks read + write it"] --> S
+    G["GPU batch tasks read + write it"] --> S
 ```
 
 The CPUs and GPUs are not shared between nodes, but the filesystem is. This is why one node can create `data/processed/` and a completely different node can later train from those files.
@@ -591,18 +591,18 @@ The CPUs and GPUs are not shared between nodes, but the filesystem is. This is w
 
 ```mermaid
 sequenceDiagram
-    participant Me as I am on the login node
+    participant Me as Me (login node)
     participant Slurm as Slurm scheduler
     participant Node as Interactive compute node
 
-    Me->>Slurm: I run srun --partition=short --pty /bin/bash
-    Slurm->>Slurm: Slurm waits for eligible CPU resources
-    Slurm->>Node: Slurm allocates one compute node
-    Node-->>Me: I receive a live Bash shell on that node
-    Me->>Node: I run setup_env.sh and download_data.sh
-    Me->>Node: I run smoke tests and inspect outputs
-    Me-->>Node: I type exit when setup is complete
-    Node-->>Me: I return to the login node
+    Me->>Slurm: run srun --partition=short --pty /bin/bash
+    Slurm->>Slurm: wait for eligible CPU resources
+    Slurm->>Node: allocate one compute node
+    Node-->>Me: live Bash shell on that node
+    Me->>Node: run setup_env.sh + download_data.sh
+    Me->>Node: run smoke tests + inspect outputs
+    Me-->>Node: type exit when setup is complete
+    Node-->>Me: back on the login node
 ```
 
 `bash` is a program, not a location. `srun --pty /bin/bash` asks Slurm to start an interactive Bash process on a compute node and connect my terminal to it.
@@ -611,10 +611,10 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    A["I create .venv once on a compute node"] --> B[("The .venv files persist in shared storage")]
-    B --> C["I activate it in my interactive shell"]
-    B --> D["My CPU batch scripts activate it again"]
-    B --> E["My GPU batch scripts activate it again"]
+    A["Create .venv once on a compute node"] --> B[(".venv files persist in shared storage")]
+    B --> C["Activate it in the interactive shell"]
+    B --> D["CPU batch scripts activate it again"]
+    B --> E["GPU batch scripts activate it again"]
 ```
 
 Creating `.venv` writes persistent files. Activating it only modifies the current shell. Every batch job starts in a fresh shell, so each `.sbatch` script must load the Python module, change into the project directory, and activate `.venv` independently.
@@ -623,18 +623,18 @@ Creating `.venv` writes persistent files. Activating it only modifies the curren
 
 ```mermaid
 sequenceDiagram
-    participant Me as I am on the login node
+    participant Me as Me (login node)
     participant Slurm as Slurm scheduler
     participant Node as A compute node
-    participant FS as My shared project storage
+    participant FS as Shared project storage
 
-    Me->>Slurm: I submit sbatch cluster/train_cnn.sbatch
-    Slurm->>Slurm: Slurm queues the requested resources
-    Slurm->>Node: Slurm starts a fresh non-interactive Bash shell
-    Node->>FS: The job reads code, environment, and processed data
-    Node->>Node: The job executes the script line by line
-    Node->>FS: The job writes checkpoints, metrics, and logs
-    Slurm-->>Me: I inspect status later with squeue and sacct
+    Me->>Slurm: submit sbatch cluster/train_cnn.sbatch
+    Slurm->>Slurm: queue the requested resources
+    Slurm->>Node: start a fresh non-interactive Bash shell
+    Node->>FS: job reads code, environment, processed data
+    Node->>Node: job executes the script line by line
+    Node->>FS: job writes checkpoints, metrics, logs
+    Slurm-->>Me: check status later with squeue + sacct
 ```
 
 Unlike an interactive shell, an `sbatch` job continues after I disconnect from SSH because Slurm owns the process.
@@ -645,18 +645,18 @@ I use a deliberate human gate between data preparation and model training. I als
 
 ```mermaid
 flowchart TD
-    A["I run submit_data.sh"] --> B["20 prep tasks run on short"]
-    B -->|"afterok"| C["Validation and EDA run on short"]
-    C --> D{"Does my log say VALIDATION PASSED?"}
-    D -->|"No"| E["I stop and repair the pipeline"]
-    D -->|"Yes"| F["I manually run submit_models.sh"]
+    A["Run submit_data.sh"] --> B["20 prep tasks run on short"]
+    B -->|"afterok"| C["Validation + EDA run on short"]
+    C --> D{"Log says VALIDATION PASSED?"}
+    D -->|"No"| E["Stop + repair the pipeline"]
+    D -->|"Yes"| F["Manually run submit_models.sh"]
     F --> G["20 CNN tasks run on short"]
     F --> H["8 packed LM tasks run on gpu"]
     G -->|"afterok"| I["Aggregation runs after both sweeps"]
     H -->|"afterok"| I
-    I --> J["I confirm aggregate completed and GPU slots are free"]
-    J --> K["I separately submit clinvar.sbatch"]
-    K --> L["ClinVar scoring and final figures run on gpu"]
+    I --> J["Confirm aggregate done + GPU slots free"]
+    J --> K["Separately submit clinvar.sbatch"]
+    K --> L["ClinVar scoring + final figures run on gpu"]
 ```
 
 The separate ClinVar submission is intentional. The LM array already consumes all eight submitted GPU-job slots; a dependent ClinVar job submitted at the same time would count as a ninth job and violate `QOSMaxSubmitJobPerUserLimit`.
@@ -667,15 +667,15 @@ I use arrays because each protein or manifest entry is an independent unit of wo
 
 ```mermaid
 flowchart TD
-    A["I submit one array script"] --> B["Slurm creates task 0"]
+    A["Submit one array script"] --> B["Slurm creates task 0"]
     A --> C["Slurm creates task 1"]
     A --> D["Slurm creates task 2"]
     A --> E["Slurm creates the remaining tasks"]
-    B --> F["Each task receives a unique SLURM_ARRAY_TASK_ID"]
+    B --> F["Each task gets a unique SLURM_ARRAY_TASK_ID"]
     C --> F
     D --> F
     E --> F
-    F --> G["I map each ID to one manifest entry"]
+    F --> G["Map each ID to one manifest entry"]
 ```
 
 ### CPU arrays
@@ -689,11 +689,11 @@ Each array contains 20 tasks: 16 primary datasets plus 4 splice-matched ablation
 
 ```mermaid
 flowchart LR
-    A["I maintain one protein config"] --> B["make_manifests.sh generates line-based work lists"]
+    A["One protein config"] --> B["make_manifests.sh generates line-based work lists"]
     B --> C["Task 0 reads manifest line 1"]
     B --> D["Task 1 reads manifest line 2"]
     B --> E["Task k reads manifest line k+1"]
-    C --> F["The task receives its protein, model, and negative mode"]
+    C --> F["Task gets its protein, model, negative mode"]
     D --> F
     E --> F
 ```
@@ -714,13 +714,13 @@ A 60-element GPU array would be rejected because every array element counts as a
 
 ```mermaid
 flowchart TD
-    A["I have 60 LM manifest lines"] --> B["I create 8 Slurm array tasks"]
+    A["60 LM manifest lines"] --> B["Create 8 Slurm array tasks"]
     B --> C["Each task processes up to 8 manifest lines sequentially"]
     C --> D["8 tasks provide 64 total slots"]
-    D --> E["The final 4 empty slots are skipped"]
-    B --> F["I throttle the array with %4"]
+    D --> E["Final 4 empty slots are skipped"]
+    B --> F["Throttle the array with %4"]
     F --> G["At most 4 tasks use 4 V100 GPUs concurrently"]
-    G --> H["I satisfy the 8-submitted and 4-running QOS exactly"]
+    G --> H["Fits the 8-submitted / 4-running QOS exactly"]
 ```
 
 This packing strategy is one of the main systems-engineering contributions of the project.
@@ -729,12 +729,12 @@ This packing strategy is one of the main systems-engineering contributions of th
 
 ```mermaid
 flowchart TD
-    A["My prep array"] -->|"afterok"| B["My validation gate"]
-    B -->|"manual approval"| C["My CNN array"]
-    B -->|"manual approval"| D["My LM array"]
-    C -->|"afterok"| E["My aggregate job"]
+    A["Prep array"] -->|"afterok"| B["Validation gate"]
+    B -->|"manual approval"| C["CNN array"]
+    B -->|"manual approval"| D["LM array"]
+    C -->|"afterok"| E["Aggregate job"]
     D -->|"afterok"| E
-    E -->|"I submit after completion"| F["My ClinVar GPU job"]
+    E -->|"submit after completion"| F["ClinVar GPU job"]
 ```
 
 I use `afterok` rather than a simple time-based sequence. A downstream job starts only when every required upstream job exits successfully.
@@ -743,11 +743,11 @@ I use `afterok` rather than a simple time-based sequence. A downstream job start
 
 ```mermaid
 flowchart LR
-    A["My CPU resources"] --> B["Data preparation"]
-    A --> C["Validation and EDA"]
+    A["CPU resources"] --> B["Data preparation"]
+    A --> C["Validation + EDA"]
     A --> D["CNN training"]
     A --> E["Metric aggregation"]
-    F["My GPU resources"] --> G["RNA-FM LoRA fine-tuning"]
+    F["GPU resources"] --> G["RNA-FM LoRA fine-tuning"]
     F --> H["RNABERT fine-tuning"]
     F --> I["SpliceBERT fine-tuning"]
     F --> J["ClinVar scoring with trained LMs"]
@@ -780,11 +780,11 @@ I reserve GPUs for work that benefits from accelerator throughput. The ~7K-param
 
 ```mermaid
 flowchart TD
-    A["I edit source and documentation on my Mac"] -->|"rsync over SSH"| B[("My Explorer project directory")]
-    B --> C["My compute jobs generate data, models, metrics, and logs"]
+    A["Edit source + docs on the Mac"] -->|"rsync over SSH"| B[("Explorer project directory")]
+    B --> C["Compute jobs generate data, models, metrics, logs"]
     C --> B
-    B -->|"resumable rsync"| D["I pull results and model checkpoints back to my Mac"]
-    D --> E["I audit the final artifact counts locally"]
+    B -->|"resumable rsync"| D["Pull results + model checkpoints back to the Mac"]
+    D --> E["Audit the final artifact counts locally"]
 ```
 
 I do not store the genome, virtual environment, or large regenerated outputs in Git. I use Git for source and documentation, and `rsync` for large or resumable transfers.
@@ -793,11 +793,11 @@ I do not store the genome, virtual environment, or large regenerated outputs in 
 
 ```mermaid
 flowchart LR
-    A["I submit a job"] --> B["I use squeue --me for live state"]
-    B --> C["I use scontrol show job for pending reasons and details"]
-    C --> D["I use sacct after completion"]
-    D --> E["I inspect ExitCode, elapsed time, CPU, memory, and assigned node"]
-    E --> F["I inspect stdout and stderr logs before trusting results"]
+    A["Submit a job"] --> B["squeue --me for live state"]
+    B --> C["scontrol show job for pending reasons + details"]
+    C --> D["sacct after completion"]
+    D --> E["Inspect ExitCode, elapsed, CPU, memory, assigned node"]
+    E --> F["Inspect stdout/stderr logs before trusting results"]
 ```
 
 Important commands:
