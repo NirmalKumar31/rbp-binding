@@ -1,4 +1,5 @@
 #!/bin/bash
+# Co-authored with Claude (Anthropic).
 # Fresh start on Explorer. DRY-RUN by default — prints what it would do. Add --force to act.
 #   bash cluster/clean_start.sh            # show what would be cancelled/removed
 #   bash cluster/clean_start.sh --force    # actually cancel jobs + delete the trees below

@@ -1,4 +1,5 @@
 #!/bin/bash
+# Co-authored with Claude (Anthropic).
 #SBATCH --job-name=rbp-clinvar
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1

@@ -1,3 +1,4 @@
+# Co-authored with Claude (Anthropic).
 """Train the CNN baseline for ONE protein, picking hyperparameters by validation AUROC.
 
     python src/train_cnn.py TARDBP                       # primary, or omit -> $SLURM_ARRAY_TASK_ID

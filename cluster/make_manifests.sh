@@ -1,4 +1,5 @@
 #!/bin/bash
+# Co-authored with Claude (Anthropic).
 # Generate the job manifests (single source of truth for the arrays) from config + ablation list.
 #   prep/cnn: <protein>\t<negatives>          16 primary + 4 splice_matched = 20 lines
 #   lm:       <model>\t<protein>\t<negatives> (16+4) x 3 models             = 60 lines

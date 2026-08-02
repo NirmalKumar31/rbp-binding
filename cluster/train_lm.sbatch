@@ -1,4 +1,5 @@
 #!/bin/bash
+# Co-authored with Claude (Anthropic).
 #SBATCH --job-name=rbp-lm
 #SBATCH --partition=gpu
 #SBATCH --array=0-7%4

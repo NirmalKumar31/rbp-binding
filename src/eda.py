@@ -1,3 +1,4 @@
+# Co-authored with Claude (Anthropic).
 """Intense EDA + assumption stress-test for the rbp-binding datasets.
 
 Reads data/processed/<P>/dataset.tsv (+ raw eCLIP peaks) and produces figures and a

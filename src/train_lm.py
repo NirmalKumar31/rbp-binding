@@ -1,3 +1,4 @@
+# Co-authored with Claude (Anthropic).
 """Fine-tune an RNA language model for ONE protein; write per-protein metrics + weights.
 
     python src/train_lm.py rnafm TARDBP                  # model + protein (primary)

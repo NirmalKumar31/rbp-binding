@@ -1,4 +1,5 @@
 #!/bin/bash
+# Co-authored with Claude (Anthropic).
 #SBATCH --job-name=rbp-agg
 #SBATCH --partition=short
 #SBATCH --cpus-per-task=2

@@ -1,3 +1,4 @@
+# Co-authored with Claude (Anthropic).
 """Validation gate — run on the FROZEN cluster data before training anything.
 
 Hard checks (exit 1 on failure):

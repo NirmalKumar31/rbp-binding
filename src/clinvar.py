@@ -1,3 +1,4 @@
+# Co-authored with Claude (Anthropic).
 """v2 ClinVar variant-effect analysis at real binding sites, all 4 tuned models.
 
 Improvements over v1's coin-flip:

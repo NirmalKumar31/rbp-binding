@@ -1,4 +1,5 @@
 #!/bin/bash
+# Co-authored with Claude (Anthropic).
 # PHASE B — training + aggregation. Run ONLY after validate said PASSED.
 # CNN (short) + LM (gpu) run in parallel; aggregation waits on both.
 # ClinVar runs SEPARATELY after the sweep: the gpu QOS caps submitted jobs at 8, the LM array

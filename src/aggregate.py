@@ -1,3 +1,4 @@
+# Co-authored with Claude (Anthropic).
 """Merge per-protein/-model metric JSONs into comparison tables + the splice ablation.
 
     python src/aggregate.py

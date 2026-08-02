@@ -1,3 +1,4 @@
+# Co-authored with Claude (Anthropic).
 """Build the binding dataset for ONE protein (array-friendly).
 
 Positives  = 101-nt windows centred on reproducible eCLIP peaks (strand-corrected).

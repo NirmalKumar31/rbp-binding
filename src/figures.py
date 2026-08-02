@@ -1,3 +1,4 @@
+# Co-authored with Claude (Anthropic).
 """Build the result figures from aggregated metrics + GPU logs.
 
     python src/figures.py      # after the sweep + aggregate.py
