@@ -1,0 +1,9 @@
+{
+  "protein": "LIN28B",
+  "model": "SpliceBERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.8589,
+  "test_auroc": 0.8631,
+  "test_auprc": 0.8757
+}

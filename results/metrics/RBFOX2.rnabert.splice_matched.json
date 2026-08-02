@@ -1,0 +1,9 @@
+{
+  "protein": "RBFOX2",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "splice_matched",
+  "val_auroc": 0.7649,
+  "test_auroc": 0.7262,
+  "test_auprc": 0.7185
+}

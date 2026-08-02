@@ -1,0 +1,9 @@
+{
+  "protein": "U2AF1",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "splice_matched",
+  "val_auroc": 0.8328,
+  "test_auroc": 0.911,
+  "test_auprc": 0.9195
+}

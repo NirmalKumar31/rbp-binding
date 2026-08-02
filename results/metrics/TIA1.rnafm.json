@@ -1,0 +1,9 @@
+{
+  "protein": "TIA1",
+  "model": "RNA-FM (LoRA)",
+  "mode": "lora",
+  "negatives": "primary",
+  "val_auroc": 0.8798,
+  "test_auroc": 0.8629,
+  "test_auprc": 0.8572
+}

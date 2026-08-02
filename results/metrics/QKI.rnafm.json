@@ -1,0 +1,9 @@
+{
+  "protein": "QKI",
+  "model": "RNA-FM (LoRA)",
+  "mode": "lora",
+  "negatives": "primary",
+  "val_auroc": 0.9708,
+  "test_auroc": 0.9465,
+  "test_auprc": 0.9513
+}

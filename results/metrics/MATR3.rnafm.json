@@ -1,0 +1,9 @@
+{
+  "protein": "MATR3",
+  "model": "RNA-FM (LoRA)",
+  "mode": "lora",
+  "negatives": "primary",
+  "val_auroc": 0.9595,
+  "test_auroc": 0.9714,
+  "test_auprc": 0.967
+}

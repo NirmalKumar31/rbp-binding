@@ -1,0 +1,19 @@
+# large / regenerable (rebuild with cluster/download_data.sh + the sweep)
+data/
+models/
+logs/
+# results/ IS committed (small: tables + figures — the portfolio showcase)
+
+# environments & caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# generated job manifests (rebuilt by cluster/make_manifests.sh)
+cluster/manifest_*.txt
+
+# OS / editor
+.DS_Store
+*.swp

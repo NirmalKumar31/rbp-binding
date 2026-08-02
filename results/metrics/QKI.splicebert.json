@@ -1,0 +1,9 @@
+{
+  "protein": "QKI",
+  "model": "SpliceBERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.9798,
+  "test_auroc": 0.965,
+  "test_auprc": 0.9704
+}

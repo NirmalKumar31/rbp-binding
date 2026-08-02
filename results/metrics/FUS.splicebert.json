@@ -1,0 +1,9 @@
+{
+  "protein": "FUS",
+  "model": "SpliceBERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.7939,
+  "test_auroc": 0.8499,
+  "test_auprc": 0.8385
+}

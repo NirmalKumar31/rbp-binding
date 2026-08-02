@@ -1,0 +1,12 @@
+{
+  "protein": "U2AF1",
+  "model": "CNN",
+  "negatives": "splice_matched",
+  "val_auroc": 0.8983,
+  "test_auroc": 0.9446,
+  "test_auprc": 0.9533,
+  "lr": 0.001,
+  "dropout": 0.5,
+  "n_train": 1706,
+  "n_test": 486
+}

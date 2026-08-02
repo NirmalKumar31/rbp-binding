@@ -1,0 +1,12 @@
+{
+  "protein": "IGF2BP2",
+  "model": "CNN",
+  "negatives": "primary",
+  "val_auroc": 0.8022,
+  "test_auroc": 0.7575,
+  "test_auprc": 0.7491,
+  "lr": 0.0005,
+  "dropout": 0.3,
+  "n_train": 5143,
+  "n_test": 1329
+}

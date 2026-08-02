@@ -1,0 +1,9 @@
+{
+  "protein": "LIN28B",
+  "model": "RNA-FM (LoRA)",
+  "mode": "lora",
+  "negatives": "primary",
+  "val_auroc": 0.756,
+  "test_auroc": 0.774,
+  "test_auprc": 0.7604
+}

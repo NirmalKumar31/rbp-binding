@@ -1,0 +1,9 @@
+{
+  "protein": "IGF2BP1",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.7353,
+  "test_auroc": 0.7506,
+  "test_auprc": 0.6996
+}

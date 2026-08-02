@@ -1,0 +1,9 @@
+{
+  "protein": "PTBP1",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.9618,
+  "test_auroc": 0.9542,
+  "test_auprc": 0.9635
+}

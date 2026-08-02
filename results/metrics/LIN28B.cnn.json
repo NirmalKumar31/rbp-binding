@@ -1,0 +1,12 @@
+{
+  "protein": "LIN28B",
+  "model": "CNN",
+  "negatives": "primary",
+  "val_auroc": 0.7218,
+  "test_auroc": 0.7358,
+  "test_auprc": 0.7081,
+  "lr": 0.001,
+  "dropout": 0.5,
+  "n_train": 9185,
+  "n_test": 3147
+}

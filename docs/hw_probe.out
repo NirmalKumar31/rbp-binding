@@ -1,0 +1,10 @@
+===== GPU =====
+name, memory.total [MiB], driver_version, compute_cap
+Tesla V100-SXM2-32GB, 32768 MiB, 545.23.08, 7.0
+===== CPU =====
+CPU(s):                             28
+Model name:                         Intel(R) Xeon(R) Gold 6132 CPU @ 2.60GHz
+Thread(s) per core:                 1
+Core(s) per socket:                 14
+Socket(s):                          2
+CPU(s) scaling MHz:                 75%

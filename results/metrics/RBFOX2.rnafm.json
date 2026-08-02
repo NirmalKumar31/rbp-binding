@@ -1,0 +1,9 @@
+{
+  "protein": "RBFOX2",
+  "model": "RNA-FM (LoRA)",
+  "mode": "lora",
+  "negatives": "primary",
+  "val_auroc": 0.8102,
+  "test_auroc": 0.8099,
+  "test_auprc": 0.7968
+}

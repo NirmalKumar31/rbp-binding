@@ -1,0 +1,9 @@
+{
+  "protein": "PUM1",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.5671,
+  "test_auroc": 0.529,
+  "test_auprc": 0.5533
+}

@@ -1,0 +1,9 @@
+{
+  "protein": "PUM2",
+  "model": "RNA-FM (LoRA)",
+  "mode": "lora",
+  "negatives": "primary",
+  "val_auroc": 0.9352,
+  "test_auroc": 0.939,
+  "test_auprc": 0.9423
+}

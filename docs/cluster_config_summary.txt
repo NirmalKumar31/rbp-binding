@@ -1,0 +1,187 @@
+############ PARTITIONS (name | timelimit | #nodes | cpus/node | mem/node | gpu type) ############
+gpu      8:00:00    11    28   186000+ gpu:v100-sxm2:4(S:0-1)
+gpu      8:00:00     1    28    187000 gpu:t4:4(S:0-1)
+gpu      8:00:00     1    28    191000 gpu:v100-sxm2:3
+gpu      8:00:00     1    28    191000 gpu:v100-sxm2:3(S:0-1)
+gpu      8:00:00     1    64    512000 gpu:a100:3
+gpu      8:00:00     2    64   510000+ gpu:a100:4
+gpu      8:00:00     4   128    512000 gpu:h200:8
+gpu      8:00:00     4    32    480000 gpu:v100-pcie:2(S:0-1)
+gpu-interactive      2:00:00    11    28   186000+ gpu:v100-sxm2:4(S:0-1)
+gpu-interactive      2:00:00     1    28    187000 gpu:t4:4(S:0-1)
+gpu-interactive      2:00:00     1    28    191000 gpu:v100-sxm2:3
+gpu-interactive      2:00:00     1    28    191000 gpu:v100-sxm2:3(S:0-1)
+gpu-interactive      2:00:00     1    64    512000 gpu:a100:3
+gpu-interactive      2:00:00     2    64   510000+ gpu:a100:4
+gpu-interactive      2:00:00     4   128    512000 gpu:h200:8
+gpu-interactive      2:00:00     4    32    480000 gpu:v100-pcie:2(S:0-1)
+gpu-short      2:00:00    11    28   186000+ gpu:v100-sxm2:4(S:0-1)
+gpu-short      2:00:00     1    28    187000 gpu:t4:4(S:0-1)
+gpu-short      2:00:00     1    28    191000 gpu:v100-sxm2:3
+gpu-short      2:00:00     1    28    191000 gpu:v100-sxm2:3(S:0-1)
+gpu-short      2:00:00     1    64    512000 gpu:a100:3
+gpu-short      2:00:00     2    64   510000+ gpu:a100:4
+gpu-short      2:00:00     4   128    512000 gpu:h200:8
+gpu-short      2:00:00     4    32    480000 gpu:v100-pcie:2(S:0-1)
+PARTITION    TIMELIMIT NODES  CPUS    MEMORY GRES
+sharing      1:00:00     1   128    515000 gpu:a6000:2
+sharing      1:00:00     1   256   1024000 gpu:a100:7
+sharing      1:00:00     1   384    514000 gpu:rtx6000:6
+sharing      1:00:00     1    48    256000 gpu:a30:6
+sharing      1:00:00     1    96   1003520 gpu:a100:3
+sharing      1:00:00     1    96    512000 gpu:h100:4
+sharing      1:00:00     1    96    514000 gpu:l40s:3
+sharing      1:00:00     1    96    773000 gpu:h200:4
+sharing      1:00:00     2  128+  1150000+ gpu:h200:8
+sharing      1:00:00     2   192   3090000 gpu:rtx6000:8
+sharing      1:00:00     2    28    512000 gpu:p100:3(S:0-1)
+sharing      1:00:00     2    32    512000 gpu:mi50:8
+sharing      1:00:00     2    32    515000 gpu:quadro:3
+sharing      1:00:00     2    36    512000 gpu:l40:10
+sharing      1:00:00     2   96+   512000+ gpu:a6000:8
+sharing      1:00:00     3    28   186000+ gpu:v100-sxm2:4(S:0-1)
+sharing      1:00:00   398   20+    62000+ (null)
+sharing      1:00:00     4   256   772000+ gpu:l40s:8
+sharing      1:00:00     4   96+   514000+ gpu:l40s:4
+sharing      1:00:00     5   64+    512000 gpu:a5000:8
+sharing      1:00:00     5   96+   987842+ gpu:a100:8
+sharing      1:00:00     6    28    512000 gpu:p100:4(S:0-1)
+sharing      1:00:00     8    48   382000+ gpu:v100:4
+short*   2-00:00:00     1    28    186000 gpu:v100-sxm2:4(S:0-1)
+short*   2-00:00:00   231   20+    62000+ (null)
+
+############ QOS LIMITS ############
+    normal                                                             
+       gpu           8         4                            gres/gpu=4 
+  multigpu           8         4                            gres/gpu=8 
+     short                    50                      cpu=1024,mem=25T 
+lowpriori+                    50             cpu=1024,gres/gpu=8,mem=+ 
+courses-g+                     2                            gres/gpu=2 
+ gpu-short           8         2                            gres/gpu=2 
+gpu-inter+           4         2    02:00:00                           
+
+############ WHAT YOUR JOBS USED TODAY ############
+          JobID      JobName Partition  AllocCPUS     ReqMem                                AllocTRES    Elapsed      State       NodeList 
+--------------- ------------ --------- ---------- ---------- ---------------------------------------- ---------- ---------- -------------- 
+        8896533         bash     short          8        16G           billing=8,cpu=8,mem=16G,node=1   00:17:03  COMPLETED          c0685 
+        8896669         bash       gpu          2         8G billing=102,cpu=2,gres/gpu=1,mem=8G,nod+   00:00:46  COMPLETED          d1022 
+        8896680 rbp-validate     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:00:20  COMPLETED          c0281 
+      8896679_0     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:02:16  COMPLETED          c0281 
+      8896679_1     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:02:20  COMPLETED          c0619 
+      8896679_2     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:01:35  COMPLETED          c0621 
+      8896679_3     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:01:28  COMPLETED          d0139 
+      8896679_4     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:01:18  COMPLETED          c0624 
+      8896679_5     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:03:01  COMPLETED          c0625 
+      8896679_6     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:01:58  COMPLETED          c0630 
+      8896679_7     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:04:20  COMPLETED          c0631 
+      8896679_8     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:00:36  COMPLETED          c0624 
+      8896679_9     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:00:28  COMPLETED          c0621 
+     8896679_10     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:02:50  COMPLETED          c0624 
+     8896679_11     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:00:43  COMPLETED          c0630 
+     8896679_12     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:04:19  COMPLETED          d0139 
+     8896679_13     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:01:02  COMPLETED          c0281 
+     8896679_14     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:00:26  COMPLETED          c0619 
+     8896679_15     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:00:27  COMPLETED          c0619 
+     8896679_16     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:01:29  COMPLETED          c0621 
+     8896679_17     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:03:01  COMPLETED          c0630 
+     8896679_18     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:01:02  COMPLETED          c0625 
+     8896679_19     rbp-prep     short          4        16G           billing=4,cpu=4,mem=16G,node=1   00:03:43  COMPLETED          c0281 
+        8896868      rbp-agg     short          2         8G            billing=2,cpu=2,mem=8G,node=1   00:00:05  COMPLETED          c0619 
+      8896866_0      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:14  COMPLETED          c0281 
+      8896866_1      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:50  COMPLETED          c0585 
+      8896866_2      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:37  COMPLETED          c0630 
+      8896866_3      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:58  COMPLETED          c0673 
+      8896866_4      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:06  COMPLETED          d0139 
+      8896866_5      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:32  COMPLETED          c0281 
+      8896866_6      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:08  COMPLETED          d0146 
+      8896866_7      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:05  COMPLETED          c0624 
+      8896866_8      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:34  COMPLETED          c0585 
+      8896866_9      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:36  COMPLETED          c0625 
+     8896866_10      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:37  COMPLETED          c0630 
+     8896866_11      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:18  COMPLETED          c0281 
+     8896866_12      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:11  COMPLETED          c0673 
+     8896866_13      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:44  COMPLETED          c0585 
+     8896866_14      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:31  COMPLETED          c0685 
+     8896866_15      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:05  COMPLETED          c3015 
+     8896866_16      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:34  COMPLETED          d0139 
+     8896866_17      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:01:24  COMPLETED          c0281 
+     8896866_18      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:27  COMPLETED          c0685 
+     8896866_19      rbp-cnn     short          4         8G            billing=4,cpu=4,mem=8G,node=1   00:00:45  COMPLETED          c0281 
+      8896867_0       rbp-lm       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:24:11  COMPLETED          d1017 
+      8896867_1       rbp-lm       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:29:44  COMPLETED          d1017 
+      8896867_2       rbp-lm       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:31:29  COMPLETED          d1017 
+      8896867_3       rbp-lm       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:27:39  COMPLETED          d1019 
+      8896867_4       rbp-lm       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:34:07  COMPLETED          d1017 
+      8896867_5       rbp-lm       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:11:54  COMPLETED          d1019 
+      8896867_6       rbp-lm       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:21:40  COMPLETED          d1017 
+      8896867_7       rbp-lm       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:08:01  COMPLETED          d1017 
+        8897201  rbp-clinvar       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:04:57  COMPLETED          d1019 
+        8898104  rbp-clinvar       gpu          8        24G billing=108,cpu=8,gres/gpu=1,mem=24G,no+   00:04:53  COMPLETED          d1019 
+
+############ NODE HARDWARE ############
+>>> representative GPU node: d1015
+NodeName=d1015
+CPUTot=28
+AvailableFeatures=(null)
+ActiveFeatures=(null)
+Gres=gpu:v100-sxm2:4(S:0-1)
+RealMemory=191000
+>>> representative CPU node: c0603
+NodeName=c0603
+CPUTot=28
+ActiveFeatures=(null)
+RealMemory=256000
+
+############ YOUR BATCH CONFIG (#SBATCH directives) ############
+cluster/aggregate.sbatch:#SBATCH --job-name=rbp-agg
+cluster/aggregate.sbatch:#SBATCH --partition=short
+cluster/aggregate.sbatch:#SBATCH --cpus-per-task=2
+cluster/aggregate.sbatch:#SBATCH --mem=8G
+cluster/aggregate.sbatch:#SBATCH --time=02:00:00
+cluster/aggregate.sbatch:#SBATCH --output=logs/agg_%j.out
+cluster/aggregate.sbatch:#SBATCH --error=logs/agg_%j.out
+cluster/clinvar.sbatch:#SBATCH --job-name=rbp-clinvar
+cluster/clinvar.sbatch:#SBATCH --partition=gpu
+cluster/clinvar.sbatch:#SBATCH --gres=gpu:1
+cluster/clinvar.sbatch:#SBATCH --cpus-per-task=8
+cluster/clinvar.sbatch:#SBATCH --mem=24G
+cluster/clinvar.sbatch:#SBATCH --time=08:00:00
+cluster/clinvar.sbatch:#SBATCH --output=logs/clinvar_%j.out
+cluster/clinvar.sbatch:#SBATCH --error=logs/clinvar_%j.out
+cluster/prep.sbatch:#SBATCH --job-name=rbp-prep
+cluster/prep.sbatch:#SBATCH --partition=short
+cluster/prep.sbatch:#SBATCH --array=0-19%8
+cluster/prep.sbatch:#SBATCH --cpus-per-task=4
+cluster/prep.sbatch:#SBATCH --mem=16G
+cluster/prep.sbatch:#SBATCH --time=08:00:00
+cluster/prep.sbatch:#SBATCH --output=logs/prep_%A_%a.out
+cluster/prep.sbatch:#SBATCH --error=logs/prep_%A_%a.out
+cluster/train_cnn.sbatch:#SBATCH --job-name=rbp-cnn
+cluster/train_cnn.sbatch:#SBATCH --partition=short
+cluster/train_cnn.sbatch:#SBATCH --array=0-19%8
+cluster/train_cnn.sbatch:#SBATCH --cpus-per-task=4
+cluster/train_cnn.sbatch:#SBATCH --mem=8G
+cluster/train_cnn.sbatch:#SBATCH --time=08:00:00
+cluster/train_cnn.sbatch:#SBATCH --output=logs/cnn_%A_%a.out
+cluster/train_cnn.sbatch:#SBATCH --error=logs/cnn_%A_%a.out
+cluster/train_lm.sbatch:#SBATCH --job-name=rbp-lm
+cluster/train_lm.sbatch:#SBATCH --partition=gpu
+cluster/train_lm.sbatch:#SBATCH --array=0-7%4
+cluster/train_lm.sbatch:#SBATCH --gres=gpu:1
+cluster/train_lm.sbatch:#SBATCH --cpus-per-task=8
+cluster/train_lm.sbatch:#SBATCH --mem=24G
+cluster/train_lm.sbatch:#SBATCH --time=08:00:00
+cluster/train_lm.sbatch:#SBATCH --output=logs/lm_%A_%a.out
+cluster/train_lm.sbatch:#SBATCH --error=logs/lm_%A_%a.out
+cluster/validate.sbatch:#SBATCH --job-name=rbp-validate
+cluster/validate.sbatch:#SBATCH --partition=short
+cluster/validate.sbatch:#SBATCH --cpus-per-task=4
+cluster/validate.sbatch:#SBATCH --mem=16G
+cluster/validate.sbatch:#SBATCH --time=02:00:00
+cluster/validate.sbatch:#SBATCH --output=logs/validate_%j.out
+cluster/validate.sbatch:#SBATCH --error=logs/validate_%j.out
+--- array line counts ---
+  20 cluster/manifest_cnn.txt
+  60 cluster/manifest_lm.txt
+  20 cluster/manifest_prep.txt
+ 100 total

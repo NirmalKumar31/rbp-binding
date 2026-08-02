@@ -1,0 +1,9 @@
+{
+  "protein": "IGF2BP3",
+  "model": "SpliceBERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.842,
+  "test_auroc": 0.7204,
+  "test_auprc": 0.6499
+}

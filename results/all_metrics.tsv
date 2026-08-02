@@ -1,0 +1,65 @@
+protein	model	negatives	val_auroc	test_auroc	test_auprc	lr	dropout	n_train	n_test	mode
+ELAVL1	CNN	primary	0.9444	0.9465	0.9419	0.0005	0.3	11765.0	4023.0	
+ELAVL1	RNABERT	primary	0.9279	0.933	0.927					full
+ELAVL1	RNA-FM (LoRA)	primary	0.9553	0.9579	0.9549					lora
+ELAVL1	SpliceBERT	primary	0.9562	0.9614	0.958					full
+EWSR1	CNN	primary	0.7873	0.8444	0.8438	0.0005	0.5	9483.0	2312.0	
+EWSR1	RNABERT	primary	0.7647	0.8236	0.8262					full
+EWSR1	RNA-FM (LoRA)	primary	0.8255	0.8747	0.8624					lora
+EWSR1	SpliceBERT	primary	0.8213	0.8767	0.8724					full
+FUS	CNN	primary	0.7917	0.8259	0.8159	0.0005	0.5	5006.0	1394.0	
+FUS	RNABERT	primary	0.7494	0.7975	0.7844					full
+FUS	RNA-FM (LoRA)	primary	0.8055	0.846	0.8086					lora
+FUS	SpliceBERT	primary	0.7939	0.8499	0.8385					full
+IGF2BP1	CNN	primary	0.8024	0.7971	0.7798	0.001	0.5	7906.0	2469.0	
+IGF2BP1	RNABERT	primary	0.7353	0.7506	0.6996					full
+IGF2BP1	RNA-FM (LoRA)	primary	0.8216	0.8426	0.8288					lora
+IGF2BP1	SpliceBERT	primary	0.858	0.8543	0.8444					full
+IGF2BP2	CNN	primary	0.8022	0.7575	0.7491	0.0005	0.3	5143.0	1329.0	
+IGF2BP2	RNABERT	primary	0.7607	0.6882	0.6743					full
+IGF2BP2	RNA-FM (LoRA)	primary	0.8484	0.7956	0.7756					lora
+IGF2BP2	SpliceBERT	primary	0.867	0.7827	0.7772					full
+IGF2BP3	CNN	primary	0.8135	0.7903	0.7734	0.0005	0.5	2702.0	1142.0	
+IGF2BP3	RNABERT	primary	0.739	0.719	0.6915					full
+IGF2BP3	RNA-FM (LoRA)	primary	0.822	0.8177	0.8051					lora
+IGF2BP3	SpliceBERT	primary	0.842	0.7204	0.6499					full
+LIN28B	CNN	primary	0.7218	0.7358	0.7081	0.001	0.5	9185.0	3147.0	
+LIN28B	RNABERT	primary	0.6668	0.7062	0.6684					full
+LIN28B	RNA-FM (LoRA)	primary	0.756	0.774	0.7604					lora
+LIN28B	SpliceBERT	primary	0.8589	0.8631	0.8757					full
+MATR3	CNN	primary	0.9484	0.9599	0.9511	0.0005	0.3	6803.0	2057.0	
+MATR3	RNABERT	primary	0.9222	0.9499	0.9421					full
+MATR3	RNA-FM (LoRA)	primary	0.9595	0.9714	0.967					lora
+MATR3	SpliceBERT	primary	0.9647	0.9747	0.9682					full
+PTBP1	CNN	primary	0.9679	0.96	0.9682	0.0005	0.5	10707.0	3103.0	
+PTBP1	RNABERT	primary	0.9618	0.9542	0.9635					full
+PTBP1	RNA-FM (LoRA)	primary	0.9757	0.9774	0.9799					lora
+PTBP1	SpliceBERT	primary	0.9717	0.9717	0.9765					full
+PUM1	CNN	primary	0.6933	0.6786	0.6962	0.0005	0.3	3428.0	1144.0	
+PUM1	RNABERT	primary	0.5671	0.529	0.5533					full
+PUM1	RNA-FM (LoRA)	primary	0.6848	0.6967	0.7215					lora
+PUM1	SpliceBERT	primary	0.8058	0.8402	0.8775					full
+PUM2	CNN	primary	0.9292	0.9351	0.9396	0.001	0.5	7188.0	2500.0	
+PUM2	RNABERT	primary	0.5943	0.5761	0.5504					full
+PUM2	RNA-FM (LoRA)	primary	0.9352	0.939	0.9423					lora
+PUM2	SpliceBERT	primary	0.9525	0.9493	0.9519					full
+QKI	CNN	primary	0.9783	0.9639	0.968	0.001	0.5	3064.0	945.0	
+QKI	RNABERT	primary	0.8218	0.7673	0.7785					full
+QKI	RNA-FM (LoRA)	primary	0.9708	0.9465	0.9513					lora
+QKI	SpliceBERT	primary	0.9798	0.965	0.9704					full
+RBFOX2	CNN	primary	0.7988	0.7901	0.7815	0.001	0.5	4299.0	1302.0	
+RBFOX2	RNABERT	primary	0.756	0.7178	0.7249					full
+RBFOX2	RNA-FM (LoRA)	primary	0.8102	0.8099	0.7968					lora
+RBFOX2	SpliceBERT	primary	0.8339	0.8392	0.8272					full
+TARDBP	CNN	primary	0.9863	0.9874	0.9892	0.001	0.3	5861.0	1679.0	
+TARDBP	RNABERT	primary	0.9621	0.9595	0.9657					full
+TARDBP	RNA-FM (LoRA)	primary	0.9905	0.9882	0.9894					lora
+TARDBP	SpliceBERT	primary	0.9905	0.9883	0.9902					full
+TIA1	CNN	primary	0.8619	0.8361	0.8336	0.001	0.5	7832.0	2423.0	
+TIA1	RNABERT	primary	0.8201	0.8075	0.7859					full
+TIA1	RNA-FM (LoRA)	primary	0.8798	0.8629	0.8572					lora
+TIA1	SpliceBERT	primary	0.8818	0.8712	0.8627					full
+U2AF1	CNN	primary	0.8762	0.9558	0.9592	0.001	0.3	1700.0	499.0	
+U2AF1	RNABERT	primary	0.83	0.9136	0.9182					full
+U2AF1	RNA-FM (LoRA)	primary	0.8952	0.9536	0.9513					lora
+U2AF1	SpliceBERT	primary	0.9433	0.9733	0.9738					full

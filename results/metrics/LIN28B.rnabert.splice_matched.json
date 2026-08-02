@@ -1,0 +1,9 @@
+{
+  "protein": "LIN28B",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "splice_matched",
+  "val_auroc": 0.6621,
+  "test_auroc": 0.708,
+  "test_auprc": 0.6613
+}

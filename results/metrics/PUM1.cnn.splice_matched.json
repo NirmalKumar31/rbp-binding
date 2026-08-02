@@ -1,0 +1,12 @@
+{
+  "protein": "PUM1",
+  "model": "CNN",
+  "negatives": "splice_matched",
+  "val_auroc": 0.6831,
+  "test_auroc": 0.6734,
+  "test_auprc": 0.6795,
+  "lr": 0.001,
+  "dropout": 0.5,
+  "n_train": 3391,
+  "n_test": 1140
+}

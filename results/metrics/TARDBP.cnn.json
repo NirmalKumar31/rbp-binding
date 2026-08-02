@@ -1,0 +1,12 @@
+{
+  "protein": "TARDBP",
+  "model": "CNN",
+  "negatives": "primary",
+  "val_auroc": 0.9863,
+  "test_auroc": 0.9874,
+  "test_auprc": 0.9892,
+  "lr": 0.001,
+  "dropout": 0.3,
+  "n_train": 5861,
+  "n_test": 1679
+}

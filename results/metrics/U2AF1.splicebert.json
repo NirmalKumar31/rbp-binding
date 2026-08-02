@@ -1,0 +1,9 @@
+{
+  "protein": "U2AF1",
+  "model": "SpliceBERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.9433,
+  "test_auroc": 0.9733,
+  "test_auprc": 0.9738
+}

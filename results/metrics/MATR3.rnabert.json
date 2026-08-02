@@ -1,0 +1,9 @@
+{
+  "protein": "MATR3",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.9222,
+  "test_auroc": 0.9499,
+  "test_auprc": 0.9421
+}

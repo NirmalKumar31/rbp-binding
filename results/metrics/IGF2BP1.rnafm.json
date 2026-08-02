@@ -1,0 +1,9 @@
+{
+  "protein": "IGF2BP1",
+  "model": "RNA-FM (LoRA)",
+  "mode": "lora",
+  "negatives": "primary",
+  "val_auroc": 0.8216,
+  "test_auroc": 0.8426,
+  "test_auprc": 0.8288
+}

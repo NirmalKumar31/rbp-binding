@@ -1,0 +1,12 @@
+{
+  "protein": "ELAVL1",
+  "model": "CNN",
+  "negatives": "primary",
+  "val_auroc": 0.9444,
+  "test_auroc": 0.9465,
+  "test_auprc": 0.9419,
+  "lr": 0.0005,
+  "dropout": 0.3,
+  "n_train": 11765,
+  "n_test": 4023
+}

@@ -1,0 +1,11 @@
+# Core stack. RNA-LM fine-tuning deps (transformers/multimolecule/peft) + the
+# CUDA-11.8 torch build are pinned in cluster/setup_env.sh.
+numpy
+pandas
+matplotlib
+seaborn
+pyfaidx
+scikit-learn
+tqdm
+torch
+logomaker

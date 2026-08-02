@@ -1,0 +1,9 @@
+{
+  "protein": "PUM2",
+  "model": "SpliceBERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.9525,
+  "test_auroc": 0.9493,
+  "test_auprc": 0.9519
+}

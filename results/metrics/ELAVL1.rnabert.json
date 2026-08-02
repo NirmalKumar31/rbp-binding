@@ -1,0 +1,9 @@
+{
+  "protein": "ELAVL1",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.9279,
+  "test_auroc": 0.933,
+  "test_auprc": 0.927
+}

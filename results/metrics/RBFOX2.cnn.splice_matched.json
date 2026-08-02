@@ -1,0 +1,12 @@
+{
+  "protein": "RBFOX2",
+  "model": "CNN",
+  "negatives": "splice_matched",
+  "val_auroc": 0.8142,
+  "test_auroc": 0.8185,
+  "test_auprc": 0.8103,
+  "lr": 0.0005,
+  "dropout": 0.3,
+  "n_train": 4279,
+  "n_test": 1306
+}

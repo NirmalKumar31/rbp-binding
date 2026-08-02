@@ -1,0 +1,12 @@
+{
+  "protein": "FUS",
+  "model": "CNN",
+  "negatives": "primary",
+  "val_auroc": 0.7917,
+  "test_auroc": 0.8259,
+  "test_auprc": 0.8159,
+  "lr": 0.0005,
+  "dropout": 0.5,
+  "n_train": 5006,
+  "n_test": 1394
+}

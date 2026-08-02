@@ -1,0 +1,4 @@
+stratum	n_path	n_benign	CNN	RNA-FM (LoRA)	RNABERT	SpliceBERT
+all @ sites	2163	3892	0.557	0.564	0.542	0.74
+noncoding @ sites	430	1704	0.584	0.583	0.526	0.837
+coding @ sites	691	2170	0.53	0.545	0.546	0.576

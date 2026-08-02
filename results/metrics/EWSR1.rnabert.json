@@ -1,0 +1,9 @@
+{
+  "protein": "EWSR1",
+  "model": "RNABERT",
+  "mode": "full",
+  "negatives": "primary",
+  "val_auroc": 0.7647,
+  "test_auroc": 0.8236,
+  "test_auprc": 0.8262
+}

@@ -1,0 +1,12 @@
+{
+  "protein": "MATR3",
+  "model": "CNN",
+  "negatives": "primary",
+  "val_auroc": 0.9484,
+  "test_auroc": 0.9599,
+  "test_auprc": 0.9511,
+  "lr": 0.0005,
+  "dropout": 0.3,
+  "n_train": 6803,
+  "n_test": 2057
+}

@@ -1,0 +1,12 @@
+{
+  "protein": "EWSR1",
+  "model": "CNN",
+  "negatives": "primary",
+  "val_auroc": 0.7873,
+  "test_auroc": 0.8444,
+  "test_auprc": 0.8438,
+  "lr": 0.0005,
+  "dropout": 0.5,
+  "n_train": 9483,
+  "n_test": 2312
+}
