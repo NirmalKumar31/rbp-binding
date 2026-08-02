@@ -1,5 +1,4 @@
 #!/bin/bash
-# Co-authored with Claude (Anthropic).
 # Download all v2 datasets: eCLIP peaks (from config/proteins.tsv) + genome + GTF + ClinVar.
 #   bash cluster/download_data.sh
 set -euo pipefail

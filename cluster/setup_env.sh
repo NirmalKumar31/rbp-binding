@@ -1,5 +1,4 @@
 #!/bin/bash
-# Co-authored with Claude (Anthropic).
 # One-time environment setup on Explorer. Run on a compute node from the project root:
 #   srun --partition=short --cpus-per-task=8 --mem=16G --time=02:00:00 --pty /bin/bash
 #   bash cluster/setup_env.sh

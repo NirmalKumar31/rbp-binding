@@ -1,4 +1,3 @@
-# Co-authored with Claude (Anthropic).
 """Generate cluster/positives_ref.tsv from an existing processed dir (run LOCALLY, once).
 
 Writes protein -> sha256 of everything-but-split. validate.py recomputes the same hash on the

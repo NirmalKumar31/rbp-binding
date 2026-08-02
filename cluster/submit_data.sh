@@ -1,5 +1,4 @@
 #!/bin/bash
-# Co-authored with Claude (Anthropic).
 # PHASE A — data + validation gate. Stops here on purpose: review the validate log before training.
 # Run setup_env.sh + download_data.sh once first.
 set -euo pipefail

@@ -1,5 +1,4 @@
 #!/bin/bash
-# Co-authored with Claude (Anthropic).
 #SBATCH --job-name=rbp-prep
 #SBATCH --partition=short
 #SBATCH --array=0-19%8

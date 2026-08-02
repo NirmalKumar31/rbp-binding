@@ -1,5 +1,4 @@
 #!/bin/bash
-# Co-authored with Claude (Anthropic).
 #SBATCH --job-name=rbp-validate
 #SBATCH --partition=short
 #SBATCH --cpus-per-task=4
